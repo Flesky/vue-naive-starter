@@ -2,12 +2,15 @@
 import type { GlobalThemeOverrides } from 'naive-ui'
 
 const themeOverrides: GlobalThemeOverrides = {
-
+  common: {
+    fontFamily: 'Inter, sans-serif',
+  },
 }
 </script>
 
 <template>
   <n-config-provider v-bind="{ themeOverrides }">
+    <n-global-style />
     <n-loading-bar-provider>
       <n-dialog-provider>
         <n-notification-provider>

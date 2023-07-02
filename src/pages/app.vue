@@ -19,7 +19,7 @@ const collapsed = useLocalStorage('collapsed', false)
           vue-naive-starter
         </div>
       </n-layout-header>
-      <n-layout class="p-4">
+      <n-layout>
         <router-view />
       </n-layout>
     </n-layout>

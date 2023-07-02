@@ -20,6 +20,11 @@ const options: MenuOption[] = [
     key: 'About',
     icon: () => <i-help />,
   },
+  {
+    label: renderLink('/forms', 'Forms'),
+    key: 'Forms',
+    icon: () => <i-forms />,
+  },
 ]
 </script>
 
