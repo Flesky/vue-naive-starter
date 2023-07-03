@@ -4,11 +4,12 @@ An opinionated starter Vue project for rapidly building admin apps.
 
 ## Features:
 
-- Vue 3, TypeScript, JSX support
-- Naive UI for components, Tailwind CSS for styling
-- Preinstalled Pinia, VueUse, and dayjs
-- File based routing
-- Auto-imported APIs, components, and icons
+- Vue 3, TypeScript, JSX
+- Naive UI, Tailwind CSS, Tabler icons
+- Pinia, VueUse, vue-request, axios, dayjs
+- Auto-imported everything
+- File-based routing
+- Prebuilt layouts, form & form items
 - ESLint with antfu's config
 
 ## How to use:

@@ -5,5 +5,7 @@ definePage({
 </script>
 
 <template>
-  <n-h2>Hello</n-h2>
+  <div class="p-4">
+    <n-h1>volant</n-h1>
+  </div>
 </template>

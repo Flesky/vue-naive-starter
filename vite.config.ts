@@ -13,6 +13,10 @@ import IconsResolver from 'unplugin-icons/resolver'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    port: 3000,
+  },
+
   plugins: [
     VueRouter({
       dts: 'types/typed-router.d.ts',
@@ -39,6 +43,7 @@ export default defineConfig({
       dts: 'types/components.d.ts',
     }),
     AutoImport({
+      dirs: ['src/composables'],
       imports: [
         'vue',
         'pinia',

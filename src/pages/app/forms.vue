@@ -1,52 +1,116 @@
-<script setup lang="ts">
-import type { FormSchema } from '@/components/app/form/schema'
+<script setup lang="tsx">
+import type { FormSchema } from '@/components/app/form/types'
+
+definePage({
+  name: 'Forms',
+})
 
 const schema: FormSchema = {
-  title: {
+  name: {
+    type: 'input',
+    label: 'Your name',
+    required: true,
+  },
+  birthday: {
+    type: 'date',
+    label: 'Birthday',
+    span: 3,
+  },
+  time: {
+    type: 'time',
+    label: 'Time',
+    span: 3,
+  },
+  fruit: {
     type: 'select',
-    label: 'Title',
-    span: 2,
-    options: ['Mr.', 'Mrs.', 'Ms.'].map(item => ({ label: item, value: item })),
+    label: 'Favorite fruit',
+    placeholder: 'Must not be Cherry',
+    options: ['Apple', 'Banana', 'Cherry'].map(item => ({ label: item, value: item })),
   },
-  first_name: {
-    type: 'input',
-    label: 'First name',
-    span: 4,
+  vegetables: {
+    type: 'select',
+    label: 'Favorite vegetable',
+    placeholder: 'Must not be Tomato',
+    multiple: true,
+    options: ['Carrot', 'Tomato', 'Potato'].map(item => ({ label: item, value: item })),
   },
-  last_name: {
-    type: 'input',
-    label: 'Last name',
-    span: 6,
-  },
-  age: {
+  bank_balance: {
     type: 'number',
-    label: 'Age',
-    span: 2,
+    label: 'Bank balance',
+    required: true,
+    span: 3,
+    prefix: 'USD',
   },
-  space: {
-    type: 'space',
-    span: 10,
+  payment: {
+    type: 'number',
+    label: 'Payment',
+    required: true,
+    span: 3,
+    suffix: 'PHP',
+  },
+  seed_phrase: {
+    type: 'textarea',
+    label: 'Seed phrase?',
+    placeholder: 'honor dream forest lunar melody blanket wisdom mirror orange galaxy kitten language',
+    mono: true,
+    span: 12,
   },
   terms: {
     type: 'checkbox',
-    content: 'I have read and agree to the terms',
-    required: true,
+    content: 'I agree to sell my soul to the devil',
   },
 }
+const { formRef, formValue, handleSubmit, feedback, setFeedback } = useForm(schema)
 
-const formValue = ref({})
+// Mock service request. Reject if fruit is Cherry or vegetables include Tomato
+const { run } = useRequest(
+  () => {
+    const form = formValue.value
+    const errors: Record<string, string> = {}
+    if (form.fruit === 'Cherry')
+      errors.fruit = 'Must not be Cherry'
+    if (form.vegetables && form.vegetables.includes('Tomato'))
+      errors.vegetables = 'Must not include Tomato'
+
+    if (Object.keys(errors).length)
+      return Promise.reject(errors)
+
+    return Promise.resolve(formValue.value)
+  },
+  {
+    manual: true,
+    onError: (err) => {
+      setFeedback(err as unknown as Record<string, string>)
+    },
+  })
 </script>
 
 <template>
   <div class="p-4">
-    <n-h2>Forms demo</n-h2>
-    <n-form class="grid grid-cols-6 gap-x-2 md:grid-cols-12" :model="formValue">
-      <app-form-items v-model="formValue" :schema="schema" />
-    </n-form>
+    <n-h2>Forms</n-h2>
+    <n-p>
+      Forms are created using the <n-text code>
+        app-form
+      </n-text> and <n-text code>
+        app-form-items
+      </n-text> components and <n-text code>
+        useForm()
+      </n-text> composables.
+    </n-p>
+    <n-divider />
+    <n-h3>Demo</n-h3>
+    <app-form ref="formRef" :model="formValue">
+      <app-form-items v-model="formValue" v-bind="{ feedback, schema }" />
+    </app-form>
+    <n-space class="mt-4">
+      <n-button type="primary" @click="handleSubmit(run)">
+        Submit
+      </n-button>
+    </n-space>
     <n-divider />
     <n-h3>Output</n-h3>
-    <n-card embedded>
-      <n-code>{{ formValue }}</n-code>
+    <n-card class="font-mono" embedded>
+      {{ formValue }}
     </n-card>
   </div>
 </template>

@@ -16,7 +16,7 @@ const collapsed = useLocalStorage('collapsed', false)
           <i-x v-else class="h-6 w-6" />
         </app-header-item>
         <div class="!my-0 px-3 font-medium">
-          vue-naive-starter
+          volant
         </div>
       </n-layout-header>
       <n-layout>
