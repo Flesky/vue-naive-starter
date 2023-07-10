@@ -10,7 +10,7 @@ const collapsed = useLocalStorage('collapsed', false)
   <n-layout has-sider position="absolute">
     <app-sider v-bind="{ collapsed }" />
     <n-layout>
-      <n-layout-header bordered class="flex h-14 items-center">
+      <n-layout-header bordered class="top-0 flex h-14 items-center" position="absolute">
         <app-header-item @click="collapsed = !collapsed">
           <i-menu-2 v-if="collapsed" class="h-6 w-6" />
           <i-x v-else class="h-6 w-6" />
@@ -19,7 +19,7 @@ const collapsed = useLocalStorage('collapsed', false)
           volant
         </div>
       </n-layout-header>
-      <n-layout>
+      <n-layout class="!top-14 @container" position="absolute">
         <router-view />
       </n-layout>
     </n-layout>

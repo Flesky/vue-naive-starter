@@ -10,6 +10,7 @@ const schema: FormSchema = {
     type: 'input',
     label: 'Your name',
     required: true,
+    span: 12,
   },
   birthday: {
     type: 'date',
@@ -40,6 +41,7 @@ const schema: FormSchema = {
     required: true,
     span: 3,
     prefix: 'USD',
+    min: 0,
   },
   payment: {
     type: 'number',
@@ -47,20 +49,21 @@ const schema: FormSchema = {
     required: true,
     span: 3,
     suffix: 'PHP',
+    buttons: true,
+    min: 0,
   },
   seed_phrase: {
     type: 'textarea',
     label: 'Seed phrase?',
     placeholder: 'honor dream forest lunar melody blanket wisdom mirror orange galaxy kitten language',
     mono: true,
-    span: 12,
   },
   terms: {
     type: 'checkbox',
     content: 'I agree to sell my soul to the devil',
   },
 }
-const { formRef, formValue, handleSubmit, feedback, setFeedback } = useForm(schema)
+const { formRef, formValue, handleSubmit, feedback, setFeedback } = useForm()
 
 // Mock service request. Reject if fruit is Cherry or vegetables include Tomato
 const { run } = useRequest(
@@ -80,7 +83,7 @@ const { run } = useRequest(
   {
     manual: true,
     onError: (err) => {
-      setFeedback(err as unknown as Record<string, string>)
+      setFeedback(err as unknown as Record<string, Array<string>>)
     },
   })
 </script>

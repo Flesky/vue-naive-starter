@@ -1,5 +1,4 @@
 import type { FormItemRule, SelectOption } from 'naive-ui'
-import type {Component} from "vue";
 
 interface FormItemBase {
   label: string
@@ -33,6 +32,9 @@ interface FormItemInput extends FormItemBase {
 
 interface FormItemNumber extends FormItemBase {
   type: 'number'
+  buttons?: boolean
+  min?: number
+  max?: number
   prefix?: string
   suffix?: string
 }
@@ -68,5 +70,5 @@ export interface FormSchema {
 }
 
 export interface FormFeedback {
-  [path: string]: string
+  [path: string]: Array<string>
 }

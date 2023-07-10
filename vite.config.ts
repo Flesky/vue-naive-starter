@@ -64,7 +64,7 @@ export default defineConfig({
             ['default', 'dayjs'],
           ],
           'vue-request': [
-            'useRequest',
+            'useRequest', 'usePagination',
           ],
         },
       ],

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { breakpointsTailwind } from '@vueuse/core'
 import type { FormItemRule } from 'naive-ui'
+import { breakpointsTailwind } from '@vueuse/core'
 import type { FormFeedback, FormItem, FormSchema } from '@/components/app/form/types'
 
 defineProps<{
-  feedback: FormFeedback
+  feedback?: FormFeedback
   schema: FormSchema
 }>()
 const modelValue = defineModel<Record<string, any>>({ required: true })
@@ -42,7 +42,13 @@ function getRules(item: FormItem) {
 
 <template>
   <template v-for="[path, item] in Object.entries(schema)" :key="path">
-    <n-form-item v-if="item.type !== 'space'" :feedback="feedback[path]" :label="item.label" :path="path" :rule="getRules(item)" :show-label="!!item.label" :style="getSpan(item.span)" :validation-status="!!feedback[path] ? 'error' : undefined">
+    <n-form-item v-if="item.type !== 'space'" :label="item.label" :path="path" :rule="getRules(item)" :show-label="!!item.label" :style="getSpan(item.span)" :validation-status="feedback && feedback[path] ? 'error' : undefined">
+      <template v-if="feedback && feedback[path]" #feedback>
+        <div v-for="(message, i) in feedback[path]" :key="i">
+          {{ message }}
+        </div>
+      </template>
+
       <n-checkbox v-if="item.type === 'checkbox'" v-model:checked="modelValue[path]" :label="item.content" />
 
       <n-date-picker v-else-if="item.type === 'date'" v-model:formatted-value="modelValue[path]" :clearable="!item.required" :placeholder="item.placeholder || 'YYYY-MM-DD'" value-format="yyyy-MM-dd" />
@@ -56,7 +62,7 @@ function getRules(item: FormItem) {
         </template>
       </n-input>
 
-      <n-input-number v-else-if="item.type === 'number'" v-model:value="modelValue[path]" :clearable="!item.required" :placeholder="item.placeholder || ''" :show-button="false">
+      <n-input-number v-else-if="item.type === 'number'" v-model:value="modelValue[path]" :clearable="!item.required" :max="item.max" :min="item.min" :placeholder="item.placeholder || ''" :show-button="item.buttons || false">
         <template v-if="item.prefix" #prefix>
           {{ item.prefix }}
         </template>

@@ -11,19 +11,19 @@ function renderLink(to: string, label: string) {
 
 const options: MenuOption[] = [
   {
-    label: renderLink('/', 'Home'),
-    key: 'Home',
-    icon: () => <i-table />,
+    label: renderLink('/', 'Volant'),
+    key: 'Volant',
+    icon: () => <i-smart-home />,
   },
   {
-    label: renderLink('/about', 'About'),
-    key: 'About',
-    icon: () => <i-help />,
+    label: renderLink('/data-grid', 'Data Grid'),
+    key: 'Data Grid',
+    icon: () => <i-border-all />,
   },
   {
     label: renderLink('/forms', 'Forms'),
     key: 'Forms',
-    icon: () => <i-forms />,
+    icon: () => <i-float-left />,
   },
 ]
 </script>

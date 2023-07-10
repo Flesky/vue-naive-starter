@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 definePage({
-  name: 'Home',
+  name: 'Volant',
 })
 </script>
 
