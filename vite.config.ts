@@ -63,6 +63,9 @@ export default defineConfig({
           'dayjs': [
             ['default', 'dayjs'],
           ],
+          'papaparse': [
+            ['default', 'Papa'],
+          ],
           'vue-request': [
             'useRequest', 'usePagination',
           ],

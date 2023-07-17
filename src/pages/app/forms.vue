@@ -60,7 +60,7 @@ const schema: FormSchema = {
   },
   terms: {
     type: 'checkbox',
-    content: 'I agree to sell my soul to the devil',
+    content: 'I agree to the terms and conditions',
   },
 }
 const { formRef, formValue, handleSubmit, feedback, setFeedback } = useForm()

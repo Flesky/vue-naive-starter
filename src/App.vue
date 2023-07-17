@@ -4,6 +4,9 @@ import type { GlobalThemeOverrides } from 'naive-ui'
 const themeOverrides: GlobalThemeOverrides = {
   common: {
     fontFamily: 'Inter, sans-serif',
+    // inputColorDisabled: 'rgb(242, 243, 245)',
+    actionColor: 'rgb(242, 243, 245)',
+    tableHeaderColor: 'rgb(242, 243, 245)',
   },
 }
 </script>

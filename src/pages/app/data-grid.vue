@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import type { DataTableColumns } from 'naive-ui'
-import { usePagination } from 'vue-request'
+import type { DataFilters } from '@/components/app/data/wrapper.vue'
 
 definePage({
   name: 'Data Grid',
@@ -11,62 +11,137 @@ const columns: DataTableColumns<Record<string, any>> = [
     type: 'selection',
   },
   {
-    key: 'name',
+    key: 'vessel_name',
     title: 'Name',
   },
   {
-    key: '_id',
+    key: 'vessel_vesselid',
     title: 'ID',
   },
   {
-    key: 'trips',
-    title: 'Trips',
+    key: 'vessel_macaddress',
+    title: 'MAC Address',
   },
   {
-    key: 'airline[0].country',
-    title: 'Country',
-    sorter: (a, b) => {
-      return a.airline[0].country.localeCompare(b.airline[0].country)
-    },
+    key: 'vessel_fullemailaddress',
+    title: 'Email Address',
+  },
+  {
+    key: 'vessel_created',
+    title: 'Date Registered',
+    render: row => row.vessel_created.slice(0, 10),
+  }, {
+    key: 'vessel_webshipserverversion',
+    title: 'CCW Version',
+    sorter: (a, b) => +a.vessel_webshipserverversion - +b.vessel_webshipserverversion,
+  },
+  {
+    key: 'vessel_partner',
+    title: 'Partner',
+  },
+  {
+    key: 'vessel_captainemailaddress',
+    title: 'Captain Email Address',
+  },
+  {
+    key: 'vessel_companyfleet',
+    title: 'Company Fleet',
   },
   {
     key: 'action',
     title: 'Action',
+    sorter: false,
   },
 ]
 
-const { current, pageSize, total, totalPage, data, loading, refresh } = usePagination(async (pagination) => {
-  const res = await axios.get('https://api.instantwebtools.net/v1/passenger', {
+const filterOptions: DataFilters = {
+  schema: {
+    name: {
+      type: 'input',
+      label: 'Vessel name, partner, or email',
+      span: 6,
+    },
+  },
+  validator: (row, filters) => {
+    // Transform all of row's properties to have lowercase
+    // so that we can do case-insensitive search.
+    row = Object.fromEntries(Object.entries(row).map(([key, value]) => [key, String(value).toLowerCase()]))
+    return String(row.vessel_name).includes(filters.name.toLowerCase())
+      || String(row.vessel_partner).includes(filters.name.toLowerCase())
+      || String(row.vessel_fullemailaddress).includes(filters.name.toLowerCase())
+  },
+}
+
+const { data, loading, refresh } = useRequest(async () => {
+  const res = await axios.get('/vessels')
+  return res.data.results
+})
+
+const columns2: DataTableColumns = [
+  {
+    type: 'selection',
+  },
+  {
+    key: 'userid',
+    title: 'ID',
+  },
+  {
+    key: 'username',
+    title: 'Username',
+  },
+  {
+    key: 'email',
+    title: 'Email Address',
+  },
+]
+
+const filterOptions2: DataFilters = {
+  schema: {
+    name: {
+      type: 'input',
+      label: 'Vessel name, partner, or email',
+    },
+  },
+  validator: (row, filters) => {
+    // Transform all of row's properties to have lowercase
+    // so that we can do case-insensitive search.
+    row = Object.fromEntries(Object.entries(row).map(([key, value]) => [key, String(value).toLowerCase()]))
+    return String(row.userid).includes(filters.name.toLowerCase())
+        || String(row.username).includes(filters.name.toLowerCase())
+        || String(row.email).includes(filters.name.toLowerCase())
+  },
+}
+
+const { data: data2, loading: loading2, refresh: refresh2, current, pageSize, total, totalPage } = usePagination(async (pagination) => {
+  return await axios.get('/users/get-all', {
     params: {
       ...pagination,
     },
   })
-  return res.data
-}
-, {
+}, {
   pagination: {
-    totalKey: 'totalPassengers',
-    totalPageKey: 'totalPages',
-
     currentKey: 'page',
-    pageSizeKey: 'size',
+    pageSizeKey: 'page_size',
+    totalPageKey: 'data.pagination.total_page',
+    totalKey: 'data.pagination.total_items',
   },
 })
 
-const selection = ref([])
+const filters = ref({})
 </script>
 
 <template>
   <div class="p-4">
-    <app-data-table v-bind="{ data: data?.data, columns, loading, refresh, total, totalPage }" id="example" v-model:current="current" v-model:page-size="pageSize" v-model:selection="selection" :row-key="row => row._id">
-      <template #selectionAction>
-        <n-button type="primary">
+    <app-data-table id="vessels" v-bind="{ data, columns, loading, refresh, filterOptions }" :row-key="row => row.vessel_vesselid" title="Vessels">
+      <template #selectionAction="{ selection }">
+        <n-button>
           Activate
-        </n-button>
-        <n-button type="error">
-          Delete
         </n-button>
       </template>
     </app-data-table>
+
+    <n-divider />
+
+    <app-data-table id="users" v-model:current="current" v-model:filters="filters" v-model:page-size="pageSize" :columns="columns2" :data="data2?.data.results" v-bind="{ total, totalPage }" :filter-options="filterOptions2" :loading="loading2" :row-key="row => row.userid" title="Subscribers" />
   </div>
 </template>
