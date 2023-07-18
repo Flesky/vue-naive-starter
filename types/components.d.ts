@@ -31,6 +31,7 @@ declare module 'vue' {
     ISettings: typeof import('~icons/tabler/settings')['default']
     ISmartHome: typeof import('~icons/tabler/smart-home')['default']
     IX: typeof import('~icons/tabler/x')['default']
+    NAlert: typeof import('naive-ui')['NAlert']
     NButton: typeof import('naive-ui')['NButton']
     NButtonGroup: typeof import('naive-ui')['NButtonGroup']
     NCard: typeof import('naive-ui')['NCard']

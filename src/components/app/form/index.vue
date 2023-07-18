@@ -2,10 +2,14 @@
 import type { FormInst } from 'naive-ui'
 import type { FormValidateMessages } from 'naive-ui/lib/form/src/interface'
 
-defineProps<{
+interface Props {
   model: Record<string, any>
   showFeedback?: boolean
-}>()
+}
+
+withDefaults(defineProps<Props>(), {
+  showFeedback: true,
+})
 
 const validateMessages: FormValidateMessages = {
   required: 'This field is required',

@@ -7,6 +7,7 @@ export interface DataFilters {
 }
 
 interface Props {
+  id: string
   title?: string
 
   data?: Record<string, any>[]
@@ -74,34 +75,56 @@ const pageSizeOptions = props.sizePicker
       value: size,
     }))
   : []
+
+// Download as CSV function
+function downloadCSV() {
+  const csv = Papa.unparse(paginatedData.value)
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.setAttribute('href', url)
+  link.setAttribute('download', `${props.id} ${dayjs().format('YYYY-MM-DD h:mm A')}.csv`)
+  link.style.visibility = 'hidden'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
 </script>
 
 <template>
   <n-card v-bind="{ title }">
     <template #header-extra>
-      <n-input v-model:value="searchQuery" class="!w-56" clearable placeholder="Search...">
-        <template #suffix>
-          <n-icon>
-            <i-search />
-          </n-icon>
-        </template>
-      </n-input>
-      <n-button v-if="filterOptions" @click="showFilters = !showFilters">
-        <template #icon>
-          <n-icon>
-            <i-filter />
-          </n-icon>
-        </template>
-      </n-button>
-      <n-divider vertical />
-      <n-button v-if="refresh" :loading="loading" @click="refresh()">
-        <template #icon>
-          <n-icon>
-            <i-reload />
-          </n-icon>
-        </template>
-      </n-button>
+      <n-space size="small" />
     </template>
+
+    <n-space class="mb-3" justify="space-between">
+      <n-space size="small">
+        <n-input v-model:value="searchQuery" class="!w-56" clearable placeholder="Search...">
+          <template #suffix>
+            <n-icon>
+              <i-search />
+            </n-icon>
+          </template>
+        </n-input>
+        <n-button v-if="filterOptions" @click="showFilters = !showFilters">
+          <template #icon>
+            <n-icon>
+              <i-filter />
+            </n-icon>
+          </template>
+          Filters
+        </n-button>
+      </n-space>
+      <n-space size="small">
+        <n-button v-if="refresh" :loading="loading" @click="refresh()">
+          <template #icon>
+            <n-icon>
+              <i-reload />
+            </n-icon>
+          </template>
+        </n-button>
+      </n-space>
+    </n-space>
 
     <n-collapse-transition v-if="filterOptions" class="mb-3" :show="showFilters">
       <n-card size="small" title="Filters">
@@ -126,25 +149,36 @@ const pageSizeOptions = props.sizePicker
     </n-spin>
 
     <template #footer>
-      <div class="flex flex-col items-center gap-3 @3xl:flex-row @3xl:justify-end @3xl:gap-2">
-        <div v-if="filteredData.length">
-          {{ (page - 1) * pageSize + 1 }}-{{ (page - 1) * pageSize + paginatedData.length }} of {{ total || filteredData.length }}
+      <div class="flex flex-col items-center gap-2 @3xl:grid">
+        <div v-if="filteredData.length" class="col-start-1 row-start-1">
+          {{ (page - 1) * pageSize + 1 }} — {{ (page - 1) * pageSize + paginatedData.length }} of {{ total || filteredData.length }}
         </div>
 
-        <n-pagination v-model:page="page" v-model:page-size="pageSize" :page-count="totalPage || Math.ceil(filteredData.length / pageSize)" simple />
+        <n-pagination v-model:page="page" v-model:page-size="pageSize" class="col-start-1 row-start-1 justify-self-center" :page-count="totalPage || Math.ceil(filteredData.length / pageSize)" simple />
 
-        <n-popselect v-model:value="pageSize" :options="pageSizeOptions" trigger="click">
-          <n-button size="small">
+        <n-space class="col-start-1 row-start-1 justify-self-end" justify="center" size="small">
+          <n-popselect v-model:value="pageSize" :options="pageSizeOptions" trigger="click">
+            <n-button size="small">
+              <template #icon>
+                <n-icon>
+                  <i-list />
+                </n-icon>
+              </template>
+              {{ pageSize }} items
+            </n-button>
+          </n-popselect>
+
+          <slot name="footer" :processed-data="paginatedData" />
+
+          <n-button size="small" @click="downloadCSV">
             <template #icon>
               <n-icon>
-                <i-list />
+                <i-download />
               </n-icon>
             </template>
-            {{ pageSize }} items
+            CSV
           </n-button>
-        </n-popselect>
-
-        <slot name="footer" :processed-data="paginatedData" />
+        </n-space>
       </div>
     </template>
   </n-card>

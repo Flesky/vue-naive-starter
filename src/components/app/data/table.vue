@@ -35,7 +35,7 @@ const columnOptions = props.columns.filter(column => !('type' in column)).map((c
 })
 
 // Save shown columns to local storage.
-const shownColumns = useLocalStorage(`${props.id}-shown-columns`, columnOptions.map(column => column.value))
+const shownColumns = useLocalStorage<Array<string | number>>(`${props.id}-shown-columns`, columnOptions.map(column => column.value))
 
 // Apply default sorter.
 // Add "sorter: false" to disable, particularly for action columns.
@@ -48,39 +48,34 @@ const columns = computed(() => {
       },
   )
 })
-
-function downloadJsonAsCsv(data: Record<string, any>[]) {
-  const csv = Papa.unparse(data)
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.setAttribute('href', url)
-  link.setAttribute('download', `${props.id} ${dayjs().format('YYYY-MM-DD h:mm A')}.csv`)
-  link.style.visibility = 'hidden'
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-}
 </script>
 
 <template>
-  <app-data-wrapper v-model:current="current" v-model:filters="filters" v-model:page-size="pageSize" v-bind="{ data, loading, refresh, totalPage, filterOptions, title }" size-picker>
+  <app-data-wrapper v-model:current="current" v-model:filters="filters" v-model:page-size="pageSize" v-bind="{ id, title, data, loading, refresh, filterOptions, totalPage }" size-picker>
     <template #default="{ processedData }">
       <n-collapse-transition class="mb-3" :show="!!selection.length">
-        <n-card>
-          <slot name="selectionAction" :selection="selection" />
-        </n-card>
+        <n-alert :show-icon="false" type="info">
+          <n-space align="center" justify="space-between">
+            <n-space align="center">
+              <div>{{ selection.length }} selected</div>
+              <n-button text type="info" @click="selection = []">
+                Clear
+              </n-button>
+            </n-space>
+            <slot name="selectionAction" :selection="selection" />
+          </n-space>
+        </n-alert>
       </n-collapse-transition>
 
       <n-scrollbar x-scrollable>
         <n-data-table
-          v-bind="{ data: processedData, columns, rowKey }" class="min-w-max"
+          v-bind="{ data: processedData, columns, rowKey }" :checked-row-keys="selection" class="min-w-max"
           @update:checked-row-keys="keys => selection = keys"
         />
       </n-scrollbar>
     </template>
 
-    <template #footer="{ processedData }">
+    <template #footer>
       <n-popselect
         v-model:value="shownColumns" multiple :options="columnOptions" trigger="click"
         @update:value="() => {
@@ -98,14 +93,6 @@ function downloadJsonAsCsv(data: Record<string, any>[]) {
           {{ shownColumns.length }} column{{ shownColumns.length === 1 ? '' : 's' }}
         </n-button>
       </n-popselect>
-      <n-button size="small" @click="downloadJsonAsCsv(processedData)">
-        <template #icon>
-          <n-icon>
-            <i-download />
-          </n-icon>
-        </template>
-        CSV
-      </n-button>
     </template>
   </app-data-wrapper>
 </template>

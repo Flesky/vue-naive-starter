@@ -133,8 +133,8 @@ const filters = ref({})
 <template>
   <div class="p-4">
     <app-data-table id="vessels" v-bind="{ data, columns, loading, refresh, filterOptions }" :row-key="row => row.vessel_vesselid" title="Vessels">
-      <template #selectionAction="{ selection }">
-        <n-button>
+      <template #selectionAction>
+        <n-button ghost type="primary">
           Activate
         </n-button>
       </template>
@@ -142,6 +142,6 @@ const filters = ref({})
 
     <n-divider />
 
-    <app-data-table id="users" v-model:current="current" v-model:filters="filters" v-model:page-size="pageSize" :columns="columns2" :data="data2?.data.results" v-bind="{ total, totalPage }" :filter-options="filterOptions2" :loading="loading2" :row-key="row => row.userid" title="Subscribers" />
+    <app-data-table id="users" v-model:current="current" v-model:filters="filters" v-model:page-size="pageSize" :columns="columns2" :data="data2?.data.results" v-bind="{ total, totalPage }" :filter-options="filterOptions2" :loading="loading2" :refresh="refresh2" :row-key="row => row.userid" title="Subscribers" />
   </div>
 </template>
