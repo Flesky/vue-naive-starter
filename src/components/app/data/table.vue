@@ -22,7 +22,7 @@ const props = defineProps<{
 const current = defineModel<number>('current')
 const pageSize = defineModel<number>('pageSize')
 const filters = defineModel<Record<string, any>>('filters')
-const selection = ref<RowKey[]>([])
+const selection = defineModel<RowKey[]>('selection', { local: true, default: [] })
 
 // Filter out non-data columns.
 const columnOptions = props.columns.filter(column => !('type' in column)).map((column) => {
