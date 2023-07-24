@@ -52,6 +52,10 @@ const columns = computed(() => {
 
 <template>
   <app-data-wrapper v-model:current="current" v-model:filters="filters" v-model:page-size="pageSize" v-bind="{ id, title, data, loading, refresh, filterOptions, totalPage }" size-picker>
+    <template #action>
+      <slot name="action" />
+    </template>
+
     <template #default="{ processedData }">
       <n-collapse-transition class="mb-3" :show="!!selection.length">
         <n-alert :show-icon="false" type="info">

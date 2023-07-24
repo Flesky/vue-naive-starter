@@ -20,7 +20,9 @@ defineExpose({ form })
 </script>
 
 <template>
-  <n-form ref="form" class="grid grid-cols-6 gap-x-2 @3xl:grid-cols-12" v-bind="{ model, validateMessages, showFeedback }">
-    <slot />
-  </n-form>
+  <div class="@container">
+    <n-form ref="form" class="grid grid-cols-6 gap-x-2 @3xl:grid-cols-12" v-bind="{ model, validateMessages, showFeedback }">
+      <slot />
+    </n-form>
+  </div>
 </template>

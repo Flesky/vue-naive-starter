@@ -6,7 +6,24 @@ definePage({
   name: 'Data Grid',
 })
 
-const columns: DataTableColumns<Record<string, any>> = [
+interface Vessel {
+  vessel_macaddress: string
+  vessel_fullemailaddress: string
+  vessel_vesselid: string
+  vessel_type: string
+  vessel_regstatus: string
+  vessel_services: string
+  vessel_expire: number
+  vessel_messagelimit: number
+  vessel_captainemailaddress: string
+  vessel_name: string
+  vessel_companyfleet: string
+  vessel_webshipserverversion: string
+  vessel_partner: string
+  vessel_created: string
+}
+
+const columns: DataTableColumns<Vessel> = [
   {
     type: 'selection',
   },
