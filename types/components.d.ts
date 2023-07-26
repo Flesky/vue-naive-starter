@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AppData: typeof import('./../src/components/app/data/index.vue')['default']
     AppDataPagination: typeof import('./../src/components/app/data/pagination.vue')['default']
     AppDataTable: typeof import('./../src/components/app/data/table.vue')['default']
     AppDataTableV2: typeof import('./../src/components/app/data/table-v2.vue')['default']
@@ -53,6 +54,7 @@ declare module 'vue' {
     NInput: typeof import('naive-ui')['NInput']
     NInputGroup: typeof import('naive-ui')['NInputGroup']
     NInputNumber: typeof import('naive-ui')['NInputNumber']
+    NInputPassword: typeof import('naive-ui')['NInputPassword']
     NLayout: typeof import('naive-ui')['NLayout']
     NLayoutHeader: typeof import('naive-ui')['NLayoutHeader']
     NLayoutSider: typeof import('naive-ui')['NLayoutSider']

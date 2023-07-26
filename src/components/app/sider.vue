@@ -39,7 +39,4 @@ const options: MenuOption[] = [
 </template>
 
 <style>
-.n-menu-item-content__icon {
-  @apply !mr-3
-}
 </style>

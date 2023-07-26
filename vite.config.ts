@@ -43,7 +43,7 @@ export default defineConfig({
       dts: 'types/components.d.ts',
     }),
     AutoImport({
-      dirs: ['src/composables'],
+      dirs: ['src/composables', 'src/stores', 'src/utils'],
       imports: [
         'vue',
         'pinia',

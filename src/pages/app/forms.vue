@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-import type { FormSchema } from '@/components/app/form/types'
+import type { FormSchema } from '@/components/app/form/items.vue'
 
 definePage({
   name: 'Forms',

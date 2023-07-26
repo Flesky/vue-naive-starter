@@ -5,10 +5,12 @@ import type { FormValidateMessages } from 'naive-ui/lib/form/src/interface'
 interface Props {
   model: Record<string, any>
   showFeedback?: boolean
+  showRequireMark?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
   showFeedback: true,
+  showRequireMark: true,
 })
 
 const validateMessages: FormValidateMessages = {
@@ -21,7 +23,7 @@ defineExpose({ form })
 
 <template>
   <div class="@container">
-    <n-form ref="form" class="grid grid-cols-6 gap-x-2 @3xl:grid-cols-12" v-bind="{ model, validateMessages, showFeedback }">
+    <n-form ref="form" class="grid grid-cols-6 gap-x-2 @3xl:grid-cols-12" v-bind="{ model, validateMessages, showFeedback, showRequireMark }">
       <slot />
     </n-form>
   </div>

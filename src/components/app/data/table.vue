@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DataTableColumns } from 'naive-ui'
 import type { RowKey } from 'naive-ui/lib/data-table/src/interface'
-import type { DataFilters } from '@/components/app/data/wrapper.vue'
+import type { DataFilters } from '@/components/app/data/index.vue'
 
 const props = defineProps<{
   id: string
@@ -51,7 +51,7 @@ const columns = computed(() => {
 </script>
 
 <template>
-  <app-data-wrapper v-model:current="current" v-model:filters="filters" v-model:page-size="pageSize" v-bind="{ id, title, data, loading, refresh, filterOptions, totalPage }" size-picker>
+  <app-data v-model:current="current" v-model:filters="filters" v-model:page-size="pageSize" v-bind="{ id, title, data, loading, refresh, filterOptions, totalPage }" size-picker>
     <template #action>
       <slot name="action" />
     </template>
@@ -98,5 +98,5 @@ const columns = computed(() => {
         </n-button>
       </n-popselect>
     </template>
-  </app-data-wrapper>
+  </app-data>
 </template>

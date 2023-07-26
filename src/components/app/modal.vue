@@ -1,17 +1,18 @@
 <script setup lang="ts">
 const props = defineProps<{
+  id: string
+
   loading?: boolean
   tabs?: {
     default: string
-    key: string
   }
   title: string
 }>()
 
 const show = defineModel<boolean>('show')
-const activeTab = ref(props.tabs ? localStorage.getItem(`modal-${props.tabs.key}-tab`) || props.tabs.default : undefined)
+const activeTab = ref(props.tabs ? localStorage.getItem(`modal-${props.id}-tab`) || props.tabs.default : undefined)
 watch(activeTab, (value) => {
-  localStorage.setItem(`modal-${props.tabs!.key}-tab`, value!)
+  localStorage.setItem(`modal-${props.id}-tab`, value!)
 })
 </script>
 

@@ -43,6 +43,7 @@ declare module 'vue-router/auto/routes' {
     'Volant': RouteRecordInfo<'Volant', '/app', Record<never, never>, Record<never, never>>,
     'Data Grid': RouteRecordInfo<'Data Grid', '/app/data-grid', Record<never, never>, Record<never, never>>,
     'Forms': RouteRecordInfo<'Forms', '/app/forms', Record<never, never>, Record<never, never>>,
+    '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
   }
 }
 

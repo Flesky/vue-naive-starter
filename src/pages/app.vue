@@ -20,21 +20,8 @@ const collapsed = useLocalStorage('collapsed', false)
         </div>
       </n-layout-header>
       <n-layout class="!top-14 @container" embedded position="absolute">
-        <!--        <n-layout-header bordered class="sticky top-0 z-50 h-14" /> -->
         <router-view />
       </n-layout>
     </n-layout>
   </n-layout>
-
-<!--  <n-layout position="absolute"> -->
-<!--    <n-layout-header bordered class="flex h-14 items-center px-4"> -->
-<!--      Hello -->
-<!--    </n-layout-header> -->
-<!--    <n-layout class="!top-14 bottom-0" has-sider position="absolute"> -->
-<!--      <app-sider /> -->
-<!--      <n-layout class="p-4"> -->
-<!--        <router-view /> -->
-<!--      </n-layout> -->
-<!--    </n-layout> -->
-<!--  </n-layout> -->
 </template>

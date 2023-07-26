@@ -1,7 +1,83 @@
 <script setup lang="ts">
-import type { FormItemRule } from 'naive-ui'
+import type { FormItemRule, SelectOption } from 'naive-ui'
 import { breakpointsTailwind } from '@vueuse/core'
-import type { FormFeedback, FormItem, FormSchema } from '@/components/app/form/types'
+
+interface FormItemBase {
+  label: string
+  placeholder?: string
+  required?: boolean
+  span?: number
+  rules?: FormItemRule | FormItemRule[]
+}
+
+interface FormItemCheckbox extends Omit<FormItemBase, 'label' | 'placeholder'> {
+  label?: string
+  type: 'checkbox'
+  content: string
+}
+
+interface FormItemDate extends FormItemBase {
+  type: 'date'
+}
+
+interface FormItemInput extends FormItemBase {
+  type: 'input'
+  mono?: boolean
+  prefix?: string
+  suffix?: string
+}
+
+interface FormItemNumber extends FormItemBase {
+  type: 'number'
+  buttons?: boolean
+  min?: number
+  max?: number
+  prefix?: string
+  suffix?: string
+}
+
+interface FormItemRadio extends FormItemBase {
+  type: 'radio'
+  options: {
+    label: string
+    value: string | number
+  }[]
+}
+
+interface FormItemPassword extends FormItemBase {
+  type: 'password'
+}
+
+interface FormItemSelect extends FormItemBase {
+  type: 'select'
+  custom?: boolean
+  multiple?: boolean
+  options: SelectOption[]
+}
+
+interface FormItemTextarea extends FormItemBase {
+  type: 'textarea'
+  mono?: boolean
+}
+
+interface FormItemTime extends FormItemBase {
+  type: 'time'
+}
+
+interface FormSpace {
+  type: 'space'
+  span?: number
+}
+
+export type FormItem = FormItemDate | FormItemCheckbox | FormItemInput | FormItemNumber | FormItemPassword | FormItemRadio | FormItemSelect | FormItemTextarea | FormItemTime | FormSpace
+
+export interface FormSchema {
+  [path: string]: FormItem
+}
+
+export interface FormFeedback {
+  [path: string]: Array<string>
+}
 
 defineProps<{
   feedback?: FormFeedback
@@ -11,10 +87,7 @@ const modelValue = defineModel<Record<string, any>>({ required: true })
 
 const isSm = useBreakpoints(breakpointsTailwind).smaller('md')
 function getSpan(span?: number) {
-  if (isSm && typeof span === 'number' && span > 6)
-    return 'grid-column: 1 / -1'
-
-  return `grid-column: span ${span || 6} / span ${span || 6}`
+  return (isSm && typeof span === 'number' && span > 6) ? 'grid-column: 1 / -1' : `grid-column: span ${span || 6} / span ${span || 6}`
 }
 
 function getRules(item: FormItem) {
@@ -70,6 +143,8 @@ function getRules(item: FormItem) {
           {{ item.suffix }}
         </template>
       </n-input-number>
+
+      <n-input v-else-if="item.type === 'password'" v-model:value="modelValue[path]" :clearable="!item.required" :placeholder="item.placeholder || ''" show-password-on="click" type="password" />
 
       <n-radio-group v-else-if="item.type === 'radio'" v-model:value="modelValue[path]">
         <n-space>
