@@ -12,6 +12,6 @@
     },
     "types": ["unplugin-icons/types/vue"],
     "allowSyntheticDefaultImports": true,
-    "strict": true
+    "strict": true,
   }
 }

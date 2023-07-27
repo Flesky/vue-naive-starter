@@ -66,8 +66,14 @@ export default defineConfig({
           'papaparse': [
             ['default', 'Papa'],
           ],
+          'vee-validate': [
+            'useForm',
+          ],
           'vue-request': [
             'useRequest', 'usePagination',
+          ],
+          'yup': [
+            'mixed', 'string', 'number', 'boolean', 'bool', 'date', 'object', 'array', 'ref', 'lazy',
           ],
         },
       ],
