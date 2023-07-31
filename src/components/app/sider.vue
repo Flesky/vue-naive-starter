@@ -25,11 +25,6 @@ const options: MenuOption[] = [
     key: 'Forms',
     icon: () => <i-float-left />,
   },
-  {
-    label: renderLink('/new-forms', 'New Forms'),
-    key: 'New Forms',
-    icon: () => <i-float-left />,
-  },
 ]
 </script>
 

@@ -67,7 +67,7 @@ export default defineConfig({
             ['default', 'Papa'],
           ],
           'vee-validate': [
-            'useForm',
+            'useAppForm',
           ],
           'vue-request': [
             'useRequest', 'usePagination',

@@ -1,29 +1,47 @@
-<script setup lang="ts">
-import type { FormInst } from 'naive-ui'
-import type { FormValidateMessages } from 'naive-ui/lib/form/src/interface'
+<script setup lang="tsx">
+import { useForm } from 'vee-validate'
+import type { Schema } from 'yup'
+import type { FormSchema } from '@/components/app/form/items.vue'
 
-interface Props {
-  model: Record<string, any>
-  showFeedback?: boolean
-  showRequireMark?: boolean
-}
+const props = defineProps<{
+  schema: FormSchema
+}>()
+const emit = defineEmits<{
+  (e: 'submit', v: Record<string, any>): void
+}>()
 
-withDefaults(defineProps<Props>(), {
-  showFeedback: true,
-  showRequireMark: true,
+const { defineComponentBinds, handleSubmit, resetForm } = useForm({
+  validationSchema: object(Object.entries(props.schema).reduce((acc, [key, item]) => {
+    acc[key] = item.rules?.label(item.label) || {
+      'date': date(),
+      'input': string(),
+      'multi-select': array(),
+      'number': number(),
+      'radio': mixed(),
+      'select': mixed(),
+    }[item.type].notRequired().label(item.label)
+    return acc
+  }, {} as Record<string, Schema>)),
+  initialValues: Object.entries(props.schema).reduce((acc, [key]) => {
+    acc[key] = null
+    return acc
+  }, {} as Record<string, null>),
 })
 
-const validateMessages: FormValidateMessages = {
-  required: 'This field is required',
-}
+provide('defineComponentBinds', defineComponentBinds)
 
-const form = ref<FormInst | null>(null)
-defineExpose({ form })
+const submitForm = handleSubmit((values) => {
+  emit('submit', values)
+})
+
+defineExpose({
+  submit: submitForm, reset: resetForm,
+})
 </script>
 
 <template>
   <div class="@container">
-    <n-form ref="form" class="grid grid-cols-6 gap-x-2 @3xl:grid-cols-12" v-bind="{ model, validateMessages, showFeedback, showRequireMark }">
+    <n-form class="grid grid-cols-6 gap-2 @2xl:grid-cols-12">
       <slot />
     </n-form>
   </div>
